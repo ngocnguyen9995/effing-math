@@ -20,7 +20,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
 router.post('/gameover', function(req, res) {
     var token = getToken(req.headers);
     if (token) {
-        console.log("Success, updating highscore");
+        
         User.update(
             { username: req.body.username },
             { $set: { highscore: req.body.score }},
@@ -30,6 +30,12 @@ router.post('/gameover', function(req, res) {
                         success: false,
                         msg: 'Server error, raw response: ' + raw 
                     });
+                } else {
+                    console.log("Success, updating highscore");
+                    return res.status(200).send({
+                        succes: true,
+                        msg: 'Updated'
+                    })
                 }
             }
         );

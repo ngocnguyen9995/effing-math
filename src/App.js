@@ -1,19 +1,8 @@
 import React, { Component } from 'react';
-import ReactDom from 'react-dom';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
-import GameClock from './components/GameClock';
+import Game from './components/Game';
 
 class App extends Component {
-
-    constructor(props) {
-      super(props);
-      this.state = {
-        answer: '',
-        correctAns: '',
-        score: 0
-      }
-    }
 
     renderCountdown = ({seconds, milliseconds, completed}) => {
       if (completed) {
@@ -22,31 +11,6 @@ class App extends Component {
         return <span>{seconds}:{milliseconds}</span>;
       }
     };
-
-    gameOver = () => {
-      const username = localStorage.getItem('username');
-      const score = this.state.score;
-      axios.post('api/game/gameover', {username, score})
-        .then((result) =>{
-          console.log("Updated highscore")
-        })
-        .catch((error) => {
-          if (error.response.status === 500) {
-            console.error("Server error");
-          }
-        });
-    }
-
-    playGame = () => {
-      const {completed, score} = this.state;
-    }
-
-    updateAnswer = (e) => {
-      const name = e.target.name;
-      this.setState({
-        [name]: e.target.value
-      });
-    }
 
     componentDidMount() {
       axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
@@ -69,7 +33,6 @@ class App extends Component {
     }
 
     render() {
-      const answer = this.state.answer;
       return (
         <div class="Container">
           <div class = "panel panel-default">
@@ -87,7 +50,7 @@ class App extends Component {
                     <tr>
                       <th>Time Remaining</th>
                       <th>
-                        <GameClock/>
+                        <Game/>
                       </th>
                     </tr>
                     <tr>
@@ -100,16 +63,6 @@ class App extends Component {
                   </tbody>
                 </table>
                 <br />
-                <form onSubmit = {this.onSubmit}>
-                        <label for = "inputAnswer">Answer</label>
-                          <input type = "text"
-                            pattern = "[0-9]*"
-                            name = "answer"
-                            value = {answer}
-                            onChange = {this.updateAnswer}
-                            required
-                          />
-                </form>
             </div>
           </div>
         </div>

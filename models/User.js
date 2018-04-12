@@ -47,14 +47,10 @@ UserSchema.methods.comparePassword = function (pw, cb) {
     });
 }
 
-UserSchema.methods.updateHighScore = function (newScore, cb) {
-    this.set({ highscore: newScore });
-    this.save(function (err, updatedHighScore) {
-        if (err) {
-            return cb(err);
-        }
-        cb(null, updatedHighScore);
-    });
+UserSchema.statics.findLeadHighScore = function (cb) {
+    this.findOne({})
+        .sort('-highscore')
+        .exec(cb);
 }
 
 module.exports = mongoose.model('User', UserSchema);

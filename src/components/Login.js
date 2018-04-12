@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDom from 'react-dom';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
@@ -27,6 +26,7 @@ class Login extends Component {
             .then((result) => {
                 localStorage.setItem('jwtToken', result.data.token);
                 localStorage.setItem('username', username);
+                localStorage.setItem('currentHighScore', result.data.highScore);
                 this.setState({
                     message: ''
                 });

@@ -1,4 +1,3 @@
-var mongoose = require('mongoose');
 var passport = require('passport');
 var settings = require('../config/settings');
 require('../config/passport-config')(passport);
@@ -55,9 +54,11 @@ router.post('/login', function(req, res) {
                     if (isMatch && !err) {
                         console.log("signed in, good");
                         var token = jwt.sign(user.toJSON(), settings.secret);
+                        var currentHighScore = user.highscore;
                         res.json({
                             success: true,
-                            token: 'JWT ' + token
+                            token: 'JWT ' + token,
+                            highScore: currentHighScore
                         });
                     }
                     else {
