@@ -12,7 +12,6 @@ var app = express();
 
 // Connect to database
 const credentials = require('./config/mongo-credentials');
-//mongoose.Promise = require('bluebird');
 mongoose.connect(credentials.url, (err, client) =>{
   if(err) {
     console.log(err);
