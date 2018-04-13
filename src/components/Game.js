@@ -2,13 +2,8 @@ import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
 import axios from 'axios';
 
-const Completionist = () => {<span>TOO SLOW. BETTER LUCK NEXT TIME</span>};
-const renderer = ({seconds, milliseconds, completed}) => {
-    if (completed) {
-        return <Completionist />;
-    }
-    return <span>{seconds}:{milliseconds}</span>
-};
+const emptyDiv = () => <div/>;
+
 
 const OP = ['+', '-', 'x', '/'];
 const PRIMES = [2,3,5,7,11,13,17,19,21,23,29];
@@ -20,7 +15,7 @@ class Game extends Component {
         this.state = {
             gameOver: false,
             reset: false,
-            date: Date.now() + 100000,
+            date: Date.now() + 7000,
             answer: 0,
             first: 0,
             second: 0,
@@ -137,6 +132,14 @@ class Game extends Component {
         }
     }
 
+    renderer = ({seconds, milliseconds, completed}) => {
+        if (completed) {
+            this.gameOver();
+            return <emptyDiv />;
+        }
+        return <span>{seconds}:{milliseconds}</span>
+    }
+
     reset = () => {
         this.setState({
             reset: true
@@ -169,16 +172,36 @@ class Game extends Component {
         }
     }
 
+    fetchHighScore = (cb) => {
+        const username = localStorage.getItem('username');
+        axios.get('api/game/user/' + username)
+            .then((result) => {
+                console.log(result.data.highscore);
+                localStorage.setItem('currentHighScore', result.data.highscore);
+                cb();
+            })
+            .catch((error) => {
+                if(error.response.status === 404) {
+                    console.error("No such username");
+                }
+            });
+    }
+
+    restartGame = () => {
+        this.fetchHighScore(window.location.reload());
+    }
+
+
     componentDidMount() {
         this.startQuestion();
-        //setInterval(() => {
+        setInterval(() => {
             if (this.state.reset) {
                 this.setState({
-                    date: Date.now() + 100000,
+                    date: Date.now() + 7000,
                     reset: false
                 });
             }
-        //}, 0);
+        }, 0);
     }
 
     render() {
@@ -191,8 +214,16 @@ class Game extends Component {
             return (
                 <div>
                     <br />
-                    <h3>{first + ' ' + op + ' ' + second + ' = ?'}</h3>
+                    <h2>{first + ' ' + op + ' ' + second + ' = ?'}</h2>
                     <br />
+                    <h3>
+                        <Countdown
+                            date = {this.state.date}
+                            intervalDelay = {0}
+                            precision = {3}
+                            renderer = {this.renderer}
+                        />
+                    </h3>
                     <form onSubmit = {this.onSubmit}>
                         <label for = "inputAnswer">Answer</label><br />
                         <input type = "text"
@@ -210,7 +241,11 @@ class Game extends Component {
             );
         }
         return (
-            <h2>Game Over. Better luck next time</h2>
+            <div>
+                <h2>Game Over. Better luck next time</h2>
+                <br/>
+                <button onClick = {this.restartGame}>Play Again</button>
+            </div>
         );
     }
 }

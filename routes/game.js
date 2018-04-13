@@ -4,7 +4,7 @@ var passport = require('passport');
 require('../config/passport-config')(passport);
 var User = require('../models/User');
 
-// Game page
+// APIs
 router.get('/', passport.authenticate('jwt', { session: false }), function(req, res) {
     var token = getToken(req.headers);
     if (token) {
@@ -15,6 +15,31 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
             msg: 'Unauthorized'
         });
     }
+});
+
+router.get('/user/:username', function(req, res){
+    const reqUsername = req.params.username;
+    User.findOne(
+        { username: reqUsername },
+        function(err, user) {
+            if (err) throw err;
+            if (!user) {
+                res.status(404).send({
+                    success: false,
+                    msg: 'No such username ' + reqUsername,
+                    request: req.params
+                });
+            } else {
+                const reqUsername = user.username;
+                const reqHighScore = user.highscore;
+                res.json({
+                    success: true,
+                    username: reqUsername,
+                    highscore: reqHighScore
+                });
+            }
+        }
+    );
 });
 
 router.post('/gameover', function(req, res) {

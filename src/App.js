@@ -48,14 +48,8 @@ class App extends Component {
                 <table class = "table table-stripe">
                   <thead>
                     <tr>
-                      <th>Time Remaining</th>
                       <th>
                         <Game/>
-                      </th>
-                    </tr>
-                    <tr>
-                      <th colspan = "2">
-                        Score
                       </th>
                     </tr>
                   </thead>
