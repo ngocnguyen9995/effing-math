@@ -17,6 +17,32 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
     }
 });
 
+router.get('/leaderboard', function(req, res){
+    User.find({})
+        .sort({highscore: -1})
+        .limit(10)
+        .exec(cb = (err, result) => {
+            if (err) throw err;
+            if (!result) {
+                res.status(500).send({
+                    success: false,
+                    msg: 'Server error'
+                })
+            } else {
+                var scoreMap = {};
+                result.forEach((user) => {
+                    scoreMap[user.username] = user.highscore;
+                });
+                res.json({
+                    success: true,
+                    msg: 'Returning leaderboard',
+                    leaderboard: scoreMap
+                });
+            }
+        });
+    
+});
+
 router.get('/user/:username', function(req, res){
     const reqUsername = req.params.username;
     User.findOne(

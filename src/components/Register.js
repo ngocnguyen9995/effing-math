@@ -80,6 +80,7 @@ class Create extends Component {
                             onChange = {this.onChange}
                             required
                     />
+                    <br />
                     <button class = "btn btn-lg btn-primary btn-block" type = "submit">Sign up</button>
                     <p>
                         Already have an account ?<Link to = "/login">

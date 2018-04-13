@@ -15,8 +15,8 @@ class Game extends Component {
         this.state = {
             gameOver: false,
             reset: false,
-            date: Date.now() + 7000,
-            answer: 0,
+            date: Date.now() + 100000,
+            answer: '',
             first: 0,
             second: 0,
             op: '',
@@ -30,7 +30,20 @@ class Game extends Component {
         return Math.floor(Math.random() * (max - min)) + min;
     }
 
+    generateMultiplier = (x) => {
+        var y = 2;
+        var i;
+        for (i = 1; i < PRIMES.length; i++) {
+            if (x % PRIMES[i] === 0) {
+                y = PRIMES[i];
+                break;
+            }
+        }
+        return y;
+    }
+
     generateQuestion = (op, difficulty) => {
+        console.log("new question");
         var randomFirst = 0;
         var randomSecond = 1;
         switch(difficulty){
@@ -49,22 +62,10 @@ class Game extends Component {
                 break;
         }
         console.log(randomFirst + ' ' + op + ' '  + randomSecond); 
-        if (op === '/' && randomFirst % randomSecond != 0) {
-            var max = max(randomFirst, randomSecond);
-            var min = min(randomFirst, randomSecond);
-            randomFirst = max;
-            randomSecond = min;
-            if (PRIMES.includes(randomFirst)) {
+        if (op === '/') {
+            if (PRIMES.includes(randomFirst))
                 ++randomFirst;
-            }
-            var rem = randomFirst % randomSecond;
-            if (rem != 0) {
-                if (randomSecond + rem > randomFirst) {
-                    randomSecond -= rem;
-                } else {
-                    randomSecond += rem;
-                }
-            }
+            randomSecond = this.generateMultiplier(randomFirst);
         }
         var ans = 0;
         switch(op) {
@@ -91,7 +92,7 @@ class Game extends Component {
     startQuestion = () => {
         var randomOp = OP[Math.floor(Math.random() * 4)];
         var question = this.generateQuestion(randomOp, this.state.difficulty);
-        //console.log(question);
+        console.log(question);
         this.setState({
             first: question[0],
             second: question[1],
@@ -164,9 +165,13 @@ class Game extends Component {
                 currentDiff = 3;
             }
             this.setState({
+                answer: '',
                 score: currentScore,
-                difficulty: currentDiff
-            })
+                difficulty: currentDiff,
+                first: 0,
+                second: 0,
+                op: ''
+            });
             this.startQuestion();
             this.reset();
         }
@@ -197,7 +202,7 @@ class Game extends Component {
         setInterval(() => {
             if (this.state.reset) {
                 this.setState({
-                    date: Date.now() + 7000,
+                    date: Date.now() + 100000,
                     reset: false
                 });
             }
@@ -237,6 +242,8 @@ class Game extends Component {
                     </form>
                     <br />
                     <h3>Score: {this.state.score}</h3>
+                    <br />
+                    <h3>Personal Best: {localStorage.getItem('currentHighScore')}</h3>
                 </div>
             );
         }

@@ -1,7 +1,7 @@
 body {
     padding-top: 40px;
     padding-bottom: 40px;
-    background-color: dimgray;
+    background-color: #d7c4c4;
 }
 
 .form-signin {
@@ -28,12 +28,12 @@ body {
     z-index: 16px;
 }
 .form-signin input[type = "username"] {
-    margin-bottom: -1px;
+    margin-bottom: 5px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
 .form-signin input[type = "password"] {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }

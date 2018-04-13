@@ -38,7 +38,7 @@ class App extends Component {
           <div class = "panel panel-default">
             <div class = "panel-heading">
               <h3 class = "panel-title" align = "middle">
-                Welcome To Effin Math&nbsp;
+                F(x)&nbsp;
                 { localStorage.getItem('jwtToken') &&
                   <button class = "btn btn-primary" align = "right" onClick = {this.logout}>Logout</button>
                 }

@@ -52,7 +52,7 @@ class Login extends Component {
                             { message }
                         </div> 
                     }
-                    <h2 class = "form-signin-heading">Welcome back</h2>
+                    <h2 class = "form-signin-heading">Welcome to F(x)</h2>
                     <label for = "inputUsername" class = "sr-only">Username</label>
                     <input type = "username" 
                             class = "form-control"
@@ -71,6 +71,7 @@ class Login extends Component {
                             onChange = {this.onChange}
                             required
                     />
+                    <br />
                     <button class = "btn btn-lg btn-primary btn-block" type = "submit">Login</button>
                     <p>
                         Don't have an account?<Link to = "/register">
