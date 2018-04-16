@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Countdown from 'react-countdown-now';
+import './Login.css';
 import axios from 'axios';
 
 const emptyDiv = () => <div/>;
@@ -7,6 +8,7 @@ const emptyDiv = () => <div/>;
 
 const OP = ['+', '-', 'x', '/'];
 const PRIMES = [2,3,5,7,11,13,17,19,21,23,29];
+const DURATION = 7000;
 
 class Game extends Component {
 
@@ -15,7 +17,7 @@ class Game extends Component {
         this.state = {
             gameOver: false,
             reset: false,
-            date: Date.now() + 100000,
+            date: Date.now() + DURATION,
             answer: '',
             first: 0,
             second: 0,
@@ -84,8 +86,6 @@ class Game extends Component {
             default:
                 break;
         }
-        //console.log("First " + randomFirst);
-        //console.log("Second " + randomSecond);
         return [randomFirst, randomSecond, ans];
     }
 
@@ -120,7 +120,6 @@ class Game extends Component {
         const score = this.state.score;
         const currentHighScore = localStorage.getItem('currentHighScore');
         if (score > currentHighScore) {
-            console.log("Congratulations! New high score!");
             axios.post('api/game/gameover', {username, score})
             .then((result) =>{
                 console.log("Updated highscore")
@@ -151,10 +150,8 @@ class Game extends Component {
         e.preventDefault();
         var currentScore = this.state.score;
         if (this.state.answer != this.state.correctAns) {
-            console.log("GameOver")
             this.gameOver();
         } else {
-            console.log("Next question");
             currentScore += 10;
             var currentDiff = 1;
             if (currentScore < 50) {
@@ -202,7 +199,7 @@ class Game extends Component {
         setInterval(() => {
             if (this.state.reset) {
                 this.setState({
-                    date: Date.now() + 100000,
+                    date: Date.now() + DURATION,
                     reset: false
                 });
             }
@@ -221,7 +218,7 @@ class Game extends Component {
                     <br />
                     <h2>{first + ' ' + op + ' ' + second + ' = ?'}</h2>
                     <br />
-                    <h3>
+                    <h3> Time left: &nbsp; 
                         <Countdown
                             date = {this.state.date}
                             intervalDelay = {0}
@@ -230,15 +227,15 @@ class Game extends Component {
                         />
                     </h3>
                     <form onSubmit = {this.onSubmit}>
-                        <label for = "inputAnswer">Answer</label><br />
+                        <label for = "inputAnswer"></label><br />
                         <input type = "text"
                             name = "answer"
                             value = {answer}
                             onChange = {this.updateAnswer}
                             required
                         />
-                        <br />
-                        <button type ="submit">Answer</button>
+                        &nbsp;
+                        <button class = "btn btn-lg" type ="submit">Answer</button>
                     </form>
                     <br />
                     <h3>Score: {this.state.score}</h3>
@@ -251,7 +248,7 @@ class Game extends Component {
             <div>
                 <h2>Game Over. Better luck next time</h2>
                 <br/>
-                <button onClick = {this.restartGame}>Play Again</button>
+                <button class = "btn btn-primary" onClick = {this.restartGame}>Play Again</button>
             </div>
         );
     }

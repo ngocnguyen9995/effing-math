@@ -29,9 +29,12 @@ router.get('/leaderboard', function(req, res){
                     msg: 'Server error'
                 })
             } else {
-                var scoreMap = {};
+                let scoreMap = [];
                 result.forEach((user) => {
-                    scoreMap[user.username] = user.highscore;
+                    let entry = {};
+                    entry['Username'] = user.username;
+                    entry['Highscore'] = user.highscore;
+                    scoreMap.push(entry);
                 });
                 res.json({
                     success: true,

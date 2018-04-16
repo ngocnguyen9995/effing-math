@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Game from './components/Game';
+import { Link } from 'react-router-dom';
 
 class App extends Component {
-
-    renderCountdown = ({seconds, milliseconds, completed}) => {
-      if (completed) {
-        return <span>TOO SLOW. BETTER LUCK NEXT TIME</span>
-      } else {
-        return <span>{seconds}:{milliseconds}</span>;
-      }
-    };
-
+  
+    constructor() {
+      super();
+      this.state = {
+        leaderboard: []
+      };
+    }
     componentDidMount() {
       axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
       axios.get('/api/game')
@@ -31,18 +30,22 @@ class App extends Component {
       localStorage.removeItem('username');
       window.location.reload();
     }
-
     render() {
       return (
         <div class="Container">
           <div class = "panel panel-default">
             <div class = "panel-heading">
               <h3 class = "panel-title" align = "middle">
-                F(x)&nbsp;
-                { localStorage.getItem('jwtToken') &&
-                  <button class = "btn btn-primary" align = "right" onClick = {this.logout}>Logout</button>
-                }
+                F(x)
               </h3>
+                <br />
+              <div padding = "20px" align = "middle">
+                { localStorage.getItem('jwtToken') &&
+                  <button class = "btn btn-primary" padding = "15px" onClick = {this.logout}>Logout</button>
+                }
+                &nbsp;
+                 <Link to = '/leaderboard'><button class = "btn btn-primary">Leaderboard</button></Link>
+              </div>
             </div>
             <div class = "panel-body">
                 <table class = "table table-stripe">
