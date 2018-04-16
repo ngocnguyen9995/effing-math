@@ -28,6 +28,9 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':'false'}));
 app.use(express.static(path.join(__dirname, 'build')));
+if (process.env.NODE_env === 'production') {
+  app.use(express.static(path.join(__dirname, 'build')));
+}
 
 app.use('/api/game', game);
 app.use('/api/auth', auth);

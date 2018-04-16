@@ -50,7 +50,7 @@ class App extends Component {
             <div class = "panel-body">
                 <table class = "table table-stripe">
                   <thead>
-                    <tr>
+                    <tr align = "center">
                       <th>
                         <Game/>
                       </th>

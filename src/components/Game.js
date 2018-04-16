@@ -248,6 +248,8 @@ class Game extends Component {
             <div>
                 <h2>Game Over. Better luck next time</h2>
                 <br/>
+                <h3>Score: {this.state.score}</h3>
+                <br/>
                 <button class = "btn btn-primary" onClick = {this.restartGame}>Play Again</button>
             </div>
         );
